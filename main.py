@@ -11,12 +11,24 @@ def start_menu():
     s_menu = input("New game: 'N'\nQuit game: 'Q': ")
     return s_menu
 
-def drukuj_karty(karty):
+def drukuj_karty(karty, gracz):
     lista_ascii=[]
-    for karta in karty:
-        wybrana_karta_nazwa = karta
-        wybrana_karta = getattr(ascii_art, wybrana_karta_nazwa)
-        lista_ascii.append(wybrana_karta['art'])
+    if gracz == 'k':
+        for index, karta in enumerate(karty):
+            if index == 0:
+                wybrana_karta_nazwa = karta
+                wybrana_karta = getattr(ascii_art, wybrana_karta_nazwa)
+                lista_ascii.append(wybrana_karta['art'])
+            else:
+                wybrana_karta_nazwa = "tyl"
+                wybrana_karta = getattr(ascii_art, wybrana_karta_nazwa)
+                lista_ascii.append(wybrana_karta)
+
+    elif gracz == 'p':
+        for karta in karty:
+            wybrana_karta_nazwa = karta
+            wybrana_karta = getattr(ascii_art, wybrana_karta_nazwa)
+            lista_ascii.append(wybrana_karta['art'])
 
     # Split the ASCII art strings into lines
     lines_list = [art.strip().split('\n') for art in lista_ascii]
@@ -80,9 +92,10 @@ while game_is_on:
         while dalszy_krok.lower() != 'n':
             cls()
             print(f"Wartosc twoich kart: {wartosc_kart(karty_gracza)}")
-            print(drukuj_karty(karty_gracza))
-            print(f"Wartosc kart krupiera: {wartosc_kart(karty_krupiera)}")
-            print(drukuj_karty(karty_krupiera))
+            print(drukuj_karty(karty_gracza, 'p'))
+            print('---------------------------------------------')
+            print(f"Karty krupiera:")
+            print(drukuj_karty(karty_krupiera, 'k'))
             dalszy_krok = input("Co robisz?:\n'G': Dobieram karte\n'N': Nie dobieram karty\n")
             if dalszy_krok.lower() == 'g':
                 karty_gracza.append(dodaj_karte())
@@ -94,6 +107,12 @@ while game_is_on:
                 if wartosc_kart(karty_krupiera) > 21:
                     print(f"Wygrywasz!! Wartosc kart krupiera przekroczyla 21: {wartosc_kart(karty_krupiera)}")
 
+        cls()
+        print(f"Wartosc twoich kart: {wartosc_kart(karty_gracza)}")
+        print(drukuj_karty(karty_gracza, 'p'))
+        print('---------------------------------------------')
+        print(f"Karty krupiera:")
+        print(drukuj_karty(karty_krupiera, 'p'))
         print(sprawdz_wynik(karty_g=wartosc_kart(karty_gracza), karty_c=wartosc_kart(karty_krupiera)))
 
 
